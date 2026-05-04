@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Card Sorting Abierto</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f8;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+/* USER INFO */
+.user-info {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.field label {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.field input {
+    padding: 8px;
+    width: 180px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* TOPBAR */
+.topbar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* BOTONES */
+button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #5c6cff;
+    color: white;
+    cursor: pointer;
+    margin: 4px;
+}
+
+button:hover {
+    background: #4a56d4;
+}
+
+.main-btn {
+    padding: 10px 18px;
+    font-size: 15px;
+}
+
+.danger {
+    color: red;
+}
+
+/* DROPDOWN */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: white;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    padding: 8px;
+    z-index: 1;
+}
+
+.dropdown-content button {
+    width: 100%;
+    text-align: left;
+    background: none;
+    color: black;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.dropdown-content button:hover {
+    background: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* CONTENEDOR */
+.container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+}
+
+/* TARJETAS */
+.cards {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* CATEGORÍAS */
+.category {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-header input {
+    flex: 1;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+}
+
+.delete-btn {
+    background: #ff4d4d;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+    padding: 0;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #d93636;
+}
+
+/* DROPZONE (AREA LIBRE) */
+.dropzone {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 400px;
+    flex: 1;
+    padding: 10px;
+}
+
+/* CARD */
+.card {
+    padding: 10px;
+    background: #e3e8ff;
+    border-radius: 6px;
+    cursor: grab;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Card Sorting Abierto</h2>
+
+<!-- INSTRUCCIONES -->
+<p style="text-align:center; max-width:700px; margin:0 auto 20px; color:#555;">
+    Arrastra las tarjetas y agrúpalas según tu criterio. Puedes crear nuevas categorías y nombrarlas libremente.
+</p>
+
+<!-- DATOS DOCENTE -->
+<div class="user-info">
+    <div class="field">
+        <label>Docente</label>
+        <input type="text" id="teacherName" placeholder="Nombre">
+    </div>
+
+    <div class="field">
+        <label>Área</label>
+        <input type="text" id="teacherArea" placeholder="Ej: Matemática">
+    </div>
+</div>
+
+<!-- BOTONES -->
+<div class="topbar">
+
+    <button onclick="location.href='index.html'">🏠 Home</button>
+
+    <button class="main-btn" onclick="addCategory()">➕ Agregar categoría</button>
+
+    <div class="dropdown">
+        <button class="main-btn">⚙️ Acciones</button>
+
+        <div class="dropdown-content">
+            <button onclick="resetCards()">Resetear tarjetas</button>
+            <button onclick="resetCategories()">Resetear categorías</button>
+            <button class="danger" onclick="deleteAll()">Eliminar categorías</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- CONTENIDO -->
+<div class="container" id="mainContainer">
+
+    <div class="cards" id="cardsContainer">
+        <h4>Tarjetas</h4>
+
+        <div class="card" draggable="true">Reglamentos y Circulares</div>
+        <div class="card" draggable="true">Kit Docente (Materiales)</div>
+        <div class="card" draggable="true">Mi Ficha Integral Docente</div>
+        <div class="card" draggable="true">Registro de Asistencia y Clases</div>
+        <div class="card" draggable="true">Planificación y Fechas de Evaluación</div>
+        <div class="card" draggable="true">Ambiente de Aprendizaje</div>
+        <div class="card" draggable="true">Calendario de Próximos Eventos</div>
+        <div class="card" draggable="true">Ficha Integral del Estudiante</div>
+        <div class="card" draggable="true">Sugerencias de Cursos y Talleres</div>
+        <div class="card" draggable="true">Solicitud de Cambio de Notas</div>
+        <div class="card" draggable="true">Ingreso de Notas y Actas</div>
+        <div class="card" draggable="true">Acceso Directo a Correo e Intranet</div>
+        <div class="card" draggable="true">Solicitud de Recuperación de Clases</div>
+        <div class="card" draggable="true">Historial de Acompañamiento</div>
+        <div class="card" draggable="true">Asistente de IA</div>
+
+    </div>
+
+</div>
+
+<!-- NOTA -->
+<p style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
+    No hay respuestas correctas o incorrectas.
+</p>
+
+<script>
+let dragged;
+
+/* GUARDAR DATOS */
+document.getElementById("teacherName").addEventListener("input", function() {
+    localStorage.setItem("teacherName", this.value);
+});
+
+document.getElementById("teacherArea").addEventListener("input", function() {
+    localStorage.setItem("teacherArea", this.value);
+});
+
+/* CARGAR DATOS */
+window.addEventListener("load", function() {
+    document.getElementById("teacherName").value = localStorage.getItem("teacherName") || "";
+    document.getElementById("teacherArea").value = localStorage.getItem("teacherArea") || "";
+});
+
+/* DRAG */
+function activateCards() {
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('dragstart', () => dragged = card);
+    });
+}
+
+/* AGREGAR CATEGORIA */
+function addCategory() {
+    const total = document.querySelectorAll('.category').length + 1;
+
+    const c = document.createElement('div');
+    c.className = 'category';
+
+    c.innerHTML = `
+        <div class="category-header">
+            <input value="Categoría ${total}">
+            <button class="delete-btn" onclick="deleteCategory(this)">×</button>
+        </div>
+        <div class="dropzone"></div>
+    `;
+
+    document.getElementById('mainContainer').appendChild(c);
+
+    const zone = c.querySelector('.dropzone');
+
+    zone.addEventListener('dragover', e => e.preventDefault());
+    zone.addEventListener('drop', () => zone.appendChild(dragged));
+}
+
+/* ELIMINAR CATEGORIA */
+function deleteCategory(btn) {
+    const category = btn.closest('.category');
+    const cards = category.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        document.getElementById('cardsContainer').appendChild(card);
+    });
+
+    category.remove();
+}
+
+/* TARJETAS ORIGEN */
+const container = document.getElementById('cardsContainer');
+
+container.addEventListener('dragover', e => e.preventDefault());
+container.addEventListener('drop', () => container.appendChild(dragged));
+
+/* RESET TARJETAS */
+function resetCards() {
+    document.querySelectorAll('.card').forEach(card => {
+        container.appendChild(card);
+    });
+}
+
+/* RESET NOMBRES */
+function resetCategories() {
+    const categories = document.querySelectorAll('.category input');
+
+    categories.forEach((input, index) => {
+        input.value = "Categoría " + (index + 1);
+    });
+}
+
+/* ELIMINAR CATEGORIAS */
+function deleteAll() {
+    resetCards();
+
+    document.querySelectorAll('.category').forEach(cat => {
+        cat.remove();
+    });
+}
+
+activateCards();
+</script>
+
+</body>
+</html>

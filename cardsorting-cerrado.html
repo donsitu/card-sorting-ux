@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Card Sorting Cerrado</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f8;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+/* USER INFO */
+.user-info {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.field label {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+/* INPUT AUTO AJUSTABLE */
+.field input {
+    padding: 10px;
+    min-width: 220px;
+    max-width: 400px;
+    width: auto;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* BOTONES */
+.topbar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #5c6cff;
+    color: white;
+    cursor: pointer;
+    margin: 4px;
+}
+
+button:hover {
+    background: #4a56d4;
+}
+
+/* CONTENEDOR */
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+/* TARJETAS */
+.cards {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* CATEGORÍAS */
+.category {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* DROPZONE */
+.dropzone {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 400px;
+    padding: 10px;
+}
+
+/* CARD */
+.card {
+    padding: 10px;
+    background: #e3e8ff;
+    border-radius: 6px;
+    cursor: grab;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Card Sorting Cerrado</h2>
+
+<!-- INSTRUCCIONES -->
+<p style="text-align:center; max-width:700px; margin:0 auto 20px; color:#555;">
+    Arrastra las tarjetas y ubícalas dentro de las categorías existentes según te parezca más lógico.
+</p>
+
+<!-- DATOS DOCENTE -->
+<div class="user-info">
+    <div class="field">
+        <label>Docente</label>
+        <input type="text" id="teacherName" placeholder="Nombre">
+    </div>
+
+    <div class="field">
+        <label>Área</label>
+        <input type="text" id="teacherArea" placeholder="Ej: Automatización">
+    </div>
+</div>
+
+<!-- BOTONES -->
+<div class="topbar">
+    <button onclick="location.href='index.html'">🏠 Home</button>
+    <button onclick="resetCards()">Resetear tarjetas</button>
+</div>
+
+<!-- CONTENIDO -->
+<div class="container">
+
+    <div class="cards" id="cardsContainer">
+        <h4>Tarjetas</h4>
+        <div class="card" draggable="true">Reglamentos y Circulares</div>
+<div class="card" draggable="true">Kit Docente (Materiales)</div>
+<div class="card" draggable="true">Mi Ficha Integral Docente</div>
+<div class="card" draggable="true">Registro de Asistencia y Clases</div>
+<div class="card" draggable="true">Planificación y Fechas de Evaluación</div>
+<div class="card" draggable="true">Ambiente de Aprendizaje</div>
+<div class="card" draggable="true">Calendario de Próximos Eventos</div>
+<div class="card" draggable="true">Ficha Integral del Estudiante</div>
+<div class="card" draggable="true">Sugerencias de Cursos y Talleres</div>
+<div class="card" draggable="true">Solicitud de Cambio de Notas</div>
+<div class="card" draggable="true">Ingreso de Notas y Actas</div>
+<div class="card" draggable="true">Acceso Directo a Correo e Intranet</div>
+<div class="card" draggable="true">Solicitud de Recuperación de Clases</div>
+<div class="card" draggable="true">Historial de Acompañamiento</div>
+<div class="card" draggable="true">Asistente de IA</div>
+    </div>
+
+    <div class="category"><h4>Gestión académica</h4><div class="dropzone"></div></div>
+    <div class="category"><h4>Acceso rápidos</h4><div class="dropzone"></div></div>
+    <div class="category"><h4>Perfil</h4><div class="dropzone"></div></div>
+    <div class="category"><h4>Administrativo</h4><div class="dropzone"></div></div>
+    
+
+</div>
+
+<!-- NOTA -->
+<p style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
+    No hay respuestas correctas o incorrectas.
+</p>
+
+<script>
+let dragged;
+
+/* DRAG */
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('dragstart', () => dragged = card);
+});
+
+/* DROP EN CATEGORÍAS */
+document.querySelectorAll('.dropzone').forEach(zone => {
+    zone.addEventListener('dragover', e => e.preventDefault());
+    zone.addEventListener('drop', () => zone.appendChild(dragged));
+});
+
+/* VOLVER A TARJETAS */
+const container = document.getElementById('cardsContainer');
+
+container.addEventListener('dragover', e => e.preventDefault());
+container.addEventListener('drop', () => container.appendChild(dragged));
+
+/* RESET TARJETAS */
+function resetCards() {
+    document.querySelectorAll('.card').forEach(card => {
+        container.appendChild(card);
+    });
+}
+
+/* GUARDAR DATOS */
+document.getElementById("teacherName").addEventListener("input", function() {
+    localStorage.setItem("teacherName", this.value);
+});
+
+document.getElementById("teacherArea").addEventListener("input", function() {
+    localStorage.setItem("teacherArea", this.value);
+});
+
+/* CARGAR DATOS */
+window.addEventListener("load", function() {
+    const name = document.getElementById("teacherName");
+    const area = document.getElementById("teacherArea");
+
+    name.value = localStorage.getItem("teacherName") || "";
+    area.value = localStorage.getItem("teacherArea") || "";
+
+    autoResize(name);
+    autoResize(area);
+});
+
+/* AUTO RESIZE */
+function autoResize(input) {
+    input.style.width = "auto";
+    input.style.width = Math.min(input.scrollWidth + 10, 400) + "px";
+}
+
+document.querySelectorAll('.field input').forEach(input => {
+    input.addEventListener('input', function () {
+        autoResize(this);
+    });
+});
+</script>
+
+</body>
+</html>
